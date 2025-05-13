@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button"
 
 export default function ProUpgrade() {
   return (
-    <div className="rounded-lg bg-purple-600 text-white p-4">
+    <div className="rounded-lg bg-purple-600 text-white p-4 shadow-xl">
       <div className="flex justify-center mb-2">
-        <div className="h-12 w-12 rounded-full bg-purple-500 flex items-center justify-center">
+        <div className="h-12 w-12 rounded-full bg-purple-500 flex items-center justify-center shadow-md">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -27,7 +27,9 @@ export default function ProUpgrade() {
         Transform your legal processes, enhance efficiency, and access tailored solutions with the power of Lexiai's Pro
         features.
       </p>
-      <Button className="w-full bg-white text-purple-600 hover:bg-purple-50">Get started with PRO</Button>
+      <Button className="w-full bg-white text-purple-600 hover:bg-purple-50">
+        Get started with PRO
+      </Button>
     </div>
   )
 }
