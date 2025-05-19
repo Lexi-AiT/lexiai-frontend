@@ -1,68 +1,99 @@
-import { Search } from "lucide-react";
+"use client"; // 🔥 Required for useState to work here
+
+import { useState } from "react";
+
+import { Settings, Bell } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Sidebar from "@/components/sidebar";
 import ModelSelector from "@/components/model-selector";
 import ChatInput from "@/components/chat-input";
-import ThemeToggle from "@/components/theme-toggle";
+import { SidebarIcon } from "lucide-react";
 
-export default function Home() {
+import { Separator } from "@/components/ui/separator";
+import { SearchForm } from "@/components/ui/search-form";
+export default function DashboardLayout() {
+  const [isSidebarVisible, setSidebarVisible] = useState(false);
+
+  const toggleSidebar = () => setSidebarVisible((prev) => !prev);
+
   return (
-    <div className="flex h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-14 px-4 flex items-center justify-between">
-             <div className="flex justify-start items-start px-6 py-3 shadow-md bg-white">
-      {/* Right-aligned group (Search + Icons) */}
-      <div className="flex gap-4">
-        <div className="w-full max-w-md ml-auto relative">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search post convos/legal topics"
-            className="w-full pl-9 bg-muted/50"
-          />
-        </div>
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <span className="sr-only">Notifications</span>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="h-5 w-5"
-          >
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-          </svg>
-        </Button>
-        <ThemeToggle />
-        <Button variant="ghost" size="icon" className="rounded-full">
-          <span className="sr-only">Profile</span>
-          <img
-            src="/placeholder.svg?height=32&width=32"
-            alt="Profile"
-            className="h-8 w-8 rounded-full"
-          />
-        </Button>
+    <div className="flex h-screen bg-background overflow-hidden">
+      {/* Sidebar: responsive drawer */}
+      <div
+        className={`fixed top-0 left-0 h-full w-64 z-50
+    transition-transform duration-700 ease-in-out transform
+    ${
+      isSidebarVisible
+        ? "translate-x-0 opacity-100"
+        : "-translate-x-full opacity-0"
+    }
+  `}
+      >
+        <Sidebar />
       </div>
-    </div>
+
+      {/* Overlay for mobile when sidebar is open */}
+      {isSidebarVisible && (
+        <div
+          className="fixed inset-0 bg-black/30 z-30 lg:hidden"
+          onClick={toggleSidebar}
+        />
+      )}
+
+      {/* Main */}
+      <main
+        className={`flex-1 flex flex-col overflow-hidden transition-margin duration-700 ease-in-out ${
+          isSidebarVisible ? "ml-64" : "ml-0"
+        }`}
+      >
+        {" "}
+        {/* Header */}
+        <header className="bg-background sticky top-0 z-50 flex w-full items-center pt-4">
+          <div className="flex h-16 w-full items-center gap-4 px-4 sm:px-6">
+            <Button
+              className="h-8 w-8"
+              variant="ghost"
+              size="icon"
+              onClick={toggleSidebar}
+            >
+              <SidebarIcon />
+            </Button>
+
+            <Separator orientation="vertical" className="h-6 hidden sm:block" />
+
+            <SearchForm className="flex-grow sm:flex-grow-0 sm:ml-auto sm:w-auto" />
+
+            <div className="flex items-center gap-3">
+              <button className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 transition">
+                <Settings className="w-5 h-5" />
+              </button>
+
+              <button className="w-10 h-10 rounded-full bg-white border border-gray-200 flex items-center justify-center text-gray-500 hover:bg-gray-100 relative transition">
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full" />
+              </button>
+
+              <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
+                <img
+                  src="/placeholder.svg?height=40&width=40"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
         </header>
+        {/* Body */}
         <div className="flex-1 overflow-auto">
-          <div className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center justify-center h-full">
+          <div className="max-w-4xl mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-200px)]">
             <ModelSelector />
-            <h1 className="text-3xl mt-12 text-gray-700 text-center">
+            <h1 className="text-3xl mt-12 text-gray-700 text-center px-4">
               Welcome to Lexiai - your legal assistant
             </h1>
-            <div className="mt-auto"></div>
           </div>
         </div>
+        {/* Chat Input */}
         <div className="p-4">
           <div className="max-w-4xl mx-auto">
             <ChatInput />
@@ -72,10 +103,11 @@ export default function Home() {
             </p>
           </div>
         </div>
-        <footer className="py-4 px-6">
-          <div className="flex justify-between items-center text-sm text-muted-foreground">
+        {/* Footer */}
+        <footer className="py-4 px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row justify-between items-center text-sm text-muted-foreground gap-2">
             <div>© 2025 Lexiai UI. All Rights Reserved.</div>
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4 justify-center sm:justify-end">
               <Link href="#" className="hover:underline">
                 Homepage
               </Link>

@@ -16,16 +16,21 @@ export default function ChatInput() {
 
   return (
     <form onSubmit={handleSubmit} className="flex gap-2 ">
-      <input
-        type="text"
-        value={message}
-        onChange={(e) => setMessage(e.target.value)}
-        placeholder="Send a message....Can my Landlord evict without notice ..."
-        className="shadow-md bg-white p-4 rounded-full flex-1 border border-input px-4 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      />
-      <Button type="submit" className="rounded-full shadow-lg bg-purple-300 text-white">
-        Submit
-      </Button>
+   <input
+  type="text"
+  value={message}
+  onChange={(e) => setMessage(e.target.value)}
+  placeholder="Send a message....Can my Landlord evict without notice ..."
+  className="shadow-md bg-white rounded-full flex-1 border border-input text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring px-6 py-4"
+/>
+
+      <Button
+  type="submit"
+  className="rounded-full shadow-lg bg-purple-300 text-white px-6 py-4"
+>
+  Submit
+</Button>
+
     </form>
   )
 }
